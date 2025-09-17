@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './auth.css'
 import { Link } from 'react-router-dom'
+import { login, forgotPassword } from '../../lib/api.js'
 
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' })
@@ -16,13 +17,7 @@ export default function Login() {
     setError('')
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      })
-      if (!res.ok) throw new Error('Invalid credentials')
-      const data = await res.json()
+      const data = await login(form)
       localStorage.setItem('token', data.token)
       localStorage.setItem('username', form.username)
       window.location.href = '/dashboard'
@@ -40,12 +35,7 @@ export default function Login() {
     if (!resetEmail) return
     setResetLoading(true)
     try {
-      const res = await fetch('http://localhost:8080/api/auth/forgot-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: resetEmail })
-      })
-      if (!res.ok) throw new Error('Failed to send reset email')
+      await forgotPassword(resetEmail)
       setInfo('If an account exists, a reset email has been sent')
       setShowReset(false)
       setResetEmail('')

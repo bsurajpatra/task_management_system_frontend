@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './auth.css'
+import { signup } from '../../lib/api.js'
 
 export default function Signup() {
   const [form, setForm] = useState({ fullName: '', email: '', username: '', password: '' })
@@ -11,13 +12,7 @@ export default function Signup() {
     setError('')
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:8080/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      })
-      if (!res.ok) throw new Error('Signup failed')
-      const data = await res.json()
+      const data = await signup(form)
       localStorage.setItem('token', data.token)
       localStorage.setItem('username', form.username)
       window.location.href = '/dashboard'

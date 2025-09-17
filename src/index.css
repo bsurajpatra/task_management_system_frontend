@@ -10,13 +10,47 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a { font-weight: 600; color: #3b82f6; text-decoration: none; }
-a:hover { color: #1d4ed8; }
+/* Reset all margins and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-body { margin: 0; min-width: 320px; min-height: 100vh; background: #ffffff; }
+a { 
+  font-weight: 600; 
+  color: #3b82f6; 
+  text-decoration: none; 
+}
 
-h1 { font-size: 2.25rem; line-height: 1.2; letter-spacing: -0.02em; }
+a:hover { 
+  color: #1d4ed8; 
+}
 
+body { 
+  margin: 0; 
+  padding: 0;
+  min-width: 320px; 
+  min-height: 100vh; 
+  background: #ffffff; 
+}
+
+h1 { 
+  font-size: 2.25rem; 
+  line-height: 1.2; 
+  letter-spacing: -0.02em; 
+  margin: 0;
+}
+
+h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/* Remove default button styles that might interfere */
 button {
   border-radius: 10px;
   border: 1px solid rgba(0,0,0,0.12);
@@ -27,9 +61,25 @@ button {
   background-color: #ffffff;
   cursor: pointer;
   transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  margin: 0;
 }
-button:hover { background-color: #f9fafb; border-color: rgba(0,0,0,0.18); }
+
+button:hover { 
+  background-color: #f9fafb; 
+  border-color: rgba(0,0,0,0.18); 
+}
+
 button:focus,
-button:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+button:focus-visible { 
+  outline: 2px solid #93c5fd; 
+  outline-offset: 2px; 
+}
+
+/* Ensure no extra spacing on main elements */
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
 
 /* Light-only palette enforced */

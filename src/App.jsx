@@ -4,6 +4,7 @@ import './App.css'
 import Landing from './components/Landing/Landing.jsx'
 import Signup from './components/Auth/Signup.jsx'
 import Login from './components/Auth/Login.jsx'
+import ResetPassword from './components/Auth/ResetPassword.jsx'
 import Dashboard from './components/Dashboard/Dashboard.jsx'
 import TasksPage from './components/Tasks/TasksPage.jsx'
 
@@ -16,7 +17,7 @@ function App() {
   const token = localStorage.getItem('token')
   function Layout({ children }) {
     const location = useLocation()
-    const hideHeaderOn = ['/', '/login', '/signup']
+    const hideHeaderOn = ['/', '/login', '/signup', '/reset-password']
     const shouldHideHeader = hideHeaderOn.includes(location.pathname)
 
     function handleLogout() {
@@ -67,7 +68,11 @@ function App() {
             </nav>
           </header>
         )}
-        <main style={{ padding: 28, maxWidth: 1120, margin: '0 auto' }}>
+        <main style={{ 
+          padding: shouldHideHeader ? 0 : 28, 
+          maxWidth: shouldHideHeader ? 'none' : 1120, 
+          margin: '0 auto' 
+        }}>
           {children}
         </main>
       </>
@@ -80,6 +85,7 @@ function App() {
         <Route path="/" element={<Layout><Landing /></Layout>} />
         <Route path="/signup" element={<Layout><Signup /></Layout>} />
         <Route path="/login" element={<Layout><Login /></Layout>} />
+        <Route path="/reset-password" element={<Layout><ResetPassword /></Layout>} />
         <Route path="/dashboard" element={<Layout><PrivateRoute><Dashboard /></PrivateRoute></Layout>} />
         <Route path="/tasks" element={<Layout><PrivateRoute><TasksPage /></PrivateRoute></Layout>} />
         <Route path="*" element={<Navigate to="/" replace />} />

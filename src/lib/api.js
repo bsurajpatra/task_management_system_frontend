@@ -38,4 +38,48 @@ export function buildQuery(params) {
   return qs ? `?${qs}` : ''
 }
 
+// Authentication API functions
+export async function login(credentials) {
+  const res = await fetch(`${BASE_URL}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(credentials)
+  })
+  if (!res.ok) throw new Error('Invalid credentials')
+  return res.json()
+}
+
+export async function signup(userData) {
+  const res = await fetch(`${BASE_URL}/api/auth/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData)
+  })
+  if (!res.ok) throw new Error('Signup failed')
+  return res.json()
+}
+
+export async function forgotPassword(email) {
+  const res = await fetch(`${BASE_URL}/api/auth/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  })
+  if (!res.ok) throw new Error('Failed to send reset email')
+  return res.json()
+}
+
+export async function resetPassword(token, newPassword) {
+  const res = await fetch(`${BASE_URL}/api/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, newPassword })
+  })
+  if (!res.ok) {
+    const errorData = await res.json()
+    throw new Error(errorData.message || 'Failed to reset password')
+  }
+  return res.json()
+}
+
 
