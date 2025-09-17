@@ -53,28 +53,32 @@ export default function Tasks() {
   return (
     <div>
       <div className="section-header">
-        <h3 style={{ margin: 0 }}>Tasks</h3>
+        <h3>Tasks</h3>
         <div className="inline-form">
-          <button className="primary" onClick={() => setShowAdd(true)}>Add task</button>
+          <button className="btn btn-primary" onClick={() => setShowAdd(true)}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add task
+          </button>
         </div>
       </div>
 
-      <div className="inline-form" style={{ marginTop: 10, display: 'grid', gridTemplateColumns: 'repeat(6, minmax(0,1fr))' }}>
-        <input name="page" type="number" min="0" value={filters.page} onChange={updateFilterField} placeholder="Page" />
-        <input name="size" type="number" min="1" value={filters.size} onChange={updateFilterField} placeholder="Size" />
-        <select name="priority" value={filters.priority} onChange={updateFilterField}>
+      <div className="inline-form" style={{ marginTop: 'var(--spacing-lg)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--spacing-md)' }}>
+        <select className="form-select" name="priority" value={filters.priority} onChange={updateFilterField}>
           <option value="">All priorities</option>
           <option value="LOW">Low</option>
           <option value="MEDIUM">Medium</option>
           <option value="HIGH">High</option>
         </select>
-        <select name="status" value={filters.status} onChange={updateFilterField}>
+        <select className="form-select" name="status" value={filters.status} onChange={updateFilterField}>
           <option value="">All status</option>
           <option value="PENDING">Pending</option>
           <option value="COMPLETED">Completed</option>
         </select>
-        <input type="date" name="dueOn" value={filters.dueOn} onChange={updateFilterField} />
-        <select name="overdue" value={filters.overdue} onChange={updateFilterField}>
+        <input className="form-input" type="date" name="dueOn" value={filters.dueOn} onChange={updateFilterField} />
+        <select className="form-select" name="overdue" value={filters.overdue} onChange={updateFilterField}>
           <option value="">Overdue?</option>
           <option value="true">Yes</option>
           <option value="false">No</option>
@@ -98,26 +102,61 @@ export default function Tasks() {
           </thead>
           <tbody>
             {tasks.map(t => (
-              <tr key={t.id} style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
-                <td>{t.title}</td>
-                <td style={{ color: '#6b7280' }}>{t.description}</td>
-                <td>{t.priority}</td>
+              <tr key={t.id}>
                 <td>
-                  <label style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                    <input type="checkbox" checked={t.status === 'COMPLETED'} onChange={(e) => toggleComplete(t.id, e.target.checked)} />
-                    {t.status}
-                  </label>
+                  <div style={{ fontWeight: '600', color: 'var(--color-gray-900)' }}>{t.title}</div>
                 </td>
-                <td>{t.dueOn || '-'}</td>
-                <td>{t.taskList?.name || '-'}</td>
-                <td style={{ display: 'flex', gap: 8 }}>
-                  <button onClick={() => updateTask({ ...t, title: prompt('Title', t.title) || t.title })}>Edit</button>
-                  <button onClick={() => deleteTask(t.id)} className="danger">Delete</button>
+                <td style={{ color: 'var(--color-gray-600)' }}>{t.description || '-'}</td>
+                <td>
+                  <span className={`priority-badge ${t.priority.toLowerCase()}`}>
+                    {t.priority}
+                  </span>
+                </td>
+                <td>
+                  <div className="checkbox-wrapper">
+                    <input 
+                      type="checkbox" 
+                      checked={t.status === 'COMPLETED'} 
+                      onChange={(e) => toggleComplete(t.id, e.target.checked)} 
+                    />
+                    <span className={`status-badge ${t.status.toLowerCase()}`}>
+                      {t.status}
+                    </span>
+                  </div>
+                </td>
+                <td style={{ color: 'var(--color-gray-600)' }}>{t.dueOn || '-'}</td>
+                <td style={{ color: 'var(--color-gray-600)' }}>{t.taskList?.name || '-'}</td>
+                <td>
+                  <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
+                    <button className="btn btn-secondary btn-sm" onClick={() => updateTask({ ...t, title: prompt('Title', t.title) || t.title })}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                      Edit
+                    </button>
+                    <button className="btn btn-danger btn-sm" onClick={() => deleteTask(t.id)}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="3,6 5,6 21,6"></polyline>
+                        <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                      </svg>
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
             {tasks.length === 0 && (
-              <tr><td colSpan={7} style={{ color: '#6b7280', padding: '8px 0' }}>No tasks found</td></tr>
+              <tr>
+                <td colSpan={7} style={{ 
+                  color: 'var(--color-gray-500)', 
+                  padding: 'var(--spacing-2xl)', 
+                  textAlign: 'center',
+                  fontStyle: 'italic'
+                }}>
+                  No tasks found
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
@@ -128,23 +167,63 @@ export default function Tasks() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h3>Add task</h3>
             <form onSubmit={createTask} className="modal-form">
-              <input name="title" value={creating.title} onChange={updateCreatingField} placeholder="Title" required />
-              <textarea name="description" value={creating.description} onChange={updateCreatingField} placeholder="Description" style={{ padding: '10px 12px', borderRadius: 10, border: '1px solid rgba(0,0,0,0.15)' }} />
+              <input 
+                className="form-input" 
+                name="title" 
+                value={creating.title} 
+                onChange={updateCreatingField} 
+                placeholder="Task title" 
+                required 
+              />
+              <textarea 
+                className="form-textarea" 
+                name="description" 
+                value={creating.description} 
+                onChange={updateCreatingField} 
+                placeholder="Task description (optional)" 
+                rows="3"
+              />
               <div className="modal-row">
-                <select name="priority" value={creating.priority} onChange={updateCreatingField}>
-                  <option value="LOW">Low</option>
-                  <option value="MEDIUM">Medium</option>
-                  <option value="HIGH">High</option>
+                <select className="form-select" name="priority" value={creating.priority} onChange={updateCreatingField}>
+                  <option value="LOW">Low Priority</option>
+                  <option value="MEDIUM">Medium Priority</option>
+                  <option value="HIGH">High Priority</option>
                 </select>
-                <input type="date" name="dueOn" value={creating.dueOn} onChange={updateCreatingField} />
+                <input className="form-input" type="date" name="dueOn" value={creating.dueOn} onChange={updateCreatingField} />
               </div>
-              <select name="taskListId" value={creating.taskListId} onChange={updateCreatingField}>
+              <select className="form-select" name="taskListId" value={creating.taskListId} onChange={updateCreatingField}>
                 <option value="">No list</option>
                 {lists.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
               </select>
               <div className="modal-actions">
-                <button type="button" className="btn-secondary" onClick={() => setShowAdd(false)}>Cancel</button>
-                <button type="submit" className="btn-primary" disabled={loading}>{loading ? 'Adding…' : 'Add task'}</button>
+                <button type="button" className="btn btn-secondary" onClick={() => setShowAdd(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                      </svg>
+                      Adding…
+                    </>
+                  ) : (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                      Add task
+                    </>
+                  )}
+                </button>
               </div>
             </form>
           </div>

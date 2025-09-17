@@ -21,7 +21,8 @@ function App() {
 
     function handleLogout() {
       localStorage.removeItem('token')
-      window.location.href = '/login'
+      localStorage.removeItem('username')
+      window.location.href = '/'
     }
 
     return (
@@ -39,13 +40,30 @@ function App() {
             top: 0,
             backdropFilter: 'saturate(180%) blur(8px)'
           }}>
-            <span style={{ fontWeight: 700 }}>TaskManagement</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {token && location.pathname === '/tasks' && (
+                <Link to="/dashboard" style={{ 
+                  background: '#6366f1', 
+                  color: '#ffffff', 
+                  border: 'none', 
+                  padding: '10px 12px', 
+                  borderRadius: 10,
+                  textDecoration: 'none',
+                  fontWeight: '600'
+                }}>
+                  Back to Dashboard
+                </Link>
+              )}
+            </div>
+            <span style={{ fontWeight: 700, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+              {location.pathname === '/tasks' ? 'Personal Task Management' : 'TaskManagement'}
+            </span>
             <nav style={{ display: 'flex', gap: 12 }}>
-              {location.pathname !== '/dashboard' && <Link to="/">Home</Link>}
+              {!token && <Link to="/">Home</Link>}
               {!token && <Link to="/signup">Sign up</Link>}
               {!token && <Link to="/login">Log in</Link>}
-              {token && location.pathname !== '/dashboard' && <Link to="/dashboard">Dashboard</Link>}
-              {token && <button onClick={handleLogout} style={{ background: '#ef4444', color: '#ffffff', border: 'none', padding: '10px 12px', borderRadius: 10 }}>Logout</button>}
+              {token && location.pathname !== '/dashboard' && location.pathname !== '/tasks' && <Link to="/dashboard">Dashboard</Link>}
+              {token && location.pathname !== '/tasks' && <button onClick={handleLogout} style={{ background: '#ef4444', color: '#ffffff', border: 'none', padding: '10px 12px', borderRadius: 10 }}>Logout</button>}
             </nav>
           </header>
         )}
