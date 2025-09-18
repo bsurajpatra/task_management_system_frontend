@@ -82,4 +82,13 @@ export async function resetPassword(token, newPassword) {
   return res.json()
 }
 
+// Tasks API helpers
+export async function setTaskDueDate(taskId, dueDate) {
+  // Use apiRequest to ensure Authorization header and error handling are consistent
+  return apiRequest(`/api/tasks/${taskId}/due-date`, {
+    method: 'PATCH',
+    body: { dueDate }
+  })
+}
+
 

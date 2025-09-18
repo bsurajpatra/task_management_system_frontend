@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { apiRequest } from '../../lib/api.js'
 
-export default function TaskLists() {
+export default function TaskLists({ onOpenList }) {
   const [lists, setLists] = useState([])
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
@@ -67,13 +67,18 @@ export default function TaskLists() {
         {lists.map((l) => (
           <li key={l.id} className="list-item">
             <EditableText text={l.name} onSave={(t) => updateList(l.id, t)} />
-            <button onClick={() => removeList(l.id)} className="btn btn-danger" style={{ padding: 'var(--spacing-xs) var(--spacing-sm)', fontSize: '0.75rem', minHeight: '1.75rem', width: 'auto', minWidth: 'auto' }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="3,6 5,6 21,6"></polyline>
-                <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
-              </svg>
-              Delete
-            </button>
+            <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
+              <button className="btn btn-secondary btn-sm" onClick={() => onOpenList && onOpenList(l)}>
+                Open
+              </button>
+              <button onClick={() => removeList(l.id)} className="btn btn-danger btn-sm" aria-label="Delete list">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="3,6 5,6 21,6"></polyline>
+                  <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                </svg>
+                Delete
+              </button>
+            </div>
           </li>
         ))}
         {lists.length === 0 && (

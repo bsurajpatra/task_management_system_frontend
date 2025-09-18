@@ -138,6 +138,10 @@
   box-shadow: var(--shadow-md);
 }
 
+/* Larger table option for modal view */
+.table-lg td { padding: calc(var(--spacing-lg) * 1.25); font-size: 0.95rem; }
+.table-lg th { padding: calc(var(--spacing-lg) * 1.25); font-size: 0.8rem; }
+
 .btn-sm {
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 0.75rem;
@@ -347,6 +351,9 @@
   animation: fadeIn 0.2s ease;
 }
 
+/* Higher priority overlay for nested modals (e.g., add-task inside list modal) */
+.modal-overlay-top { z-index: 2000; }
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -363,6 +370,13 @@
   animation: slideIn 0.3s ease;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+.modal-top { box-shadow: var(--shadow-xl); }
+
+.modal-wide {
+  max-width: 920px;
+  max-height: 92vh;
 }
 
 @keyframes slideIn {
